@@ -432,7 +432,7 @@ export default function Home() {
         </div>
 
         <button className="mt-8 px-8 py-3 bg-white text-black font-medium hover:bg-blue-50 transition duration-300">
-          Book Nigger
+          Book Now
         </button>
       </div>
 
