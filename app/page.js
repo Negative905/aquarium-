@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { ShieldCheck, Fish, FileText, Wrench } from "lucide-react";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -45,11 +46,11 @@ export default function Home() {
             </div>
 
             {/* Desktop Navigation Links */}
-            <ul className="hidden md:flex items-center gap-4 lg:gap-6 text-black">
+            <ul className="hidden md:flex items-center gap-6 lg:gap-10 lg:text-xl text-black text-sm">
               <li>
                 <a
                   href="#home"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity font-medium"
                 >
                   Home
                 </a>
@@ -57,7 +58,7 @@ export default function Home() {
               <li>
                 <a
                   href="#about"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity font-medium"
                 >
                   About us
                 </a>
@@ -65,7 +66,7 @@ export default function Home() {
               <li>
                 <a
                   href="#aquariums"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity font-medium"
                 >
                   Aquariums
                 </a>
@@ -73,7 +74,7 @@ export default function Home() {
               <li>
                 <a
                   href="#fish"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity font-medium"
                 >
                   Fish & Species
                 </a>
@@ -81,7 +82,7 @@ export default function Home() {
               <li>
                 <a
                   href="#plants"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity font-medium"
                 >
                   Plants & Corals
                 </a>
@@ -89,7 +90,7 @@ export default function Home() {
               <li>
                 <a
                   href="#services"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity  font-medium"
                 >
                   Services
                 </a>
@@ -97,7 +98,7 @@ export default function Home() {
               <li>
                 <a
                   href="#contact"
-                  className="hover:opacity-70 transition-opacity text-xs lg:text-sm font-medium"
+                  className="hover:opacity-70 transition-opacity  font-medium"
                 >
                   Contact
                 </a>
@@ -392,7 +393,7 @@ export default function Home() {
       <h2 className="text-4xl lg:text-5xl font-bold mb-4">
         Why Choose Ocean Crown ?
       </h2>
-      <p className="text-blue-200 max-w-2xl mx-auto">
+      <p className="text-blue-200 max-w-2xl mx-auto text-lg">
         Your space deserves the elegance and tranquility of a perfectly crafted underwater world.
       </p>
     </div>
@@ -403,16 +404,18 @@ export default function Home() {
       {/* LEFT FEATURES */}
       <div className="space-y-16 text-center lg:text-right">
 
-        <div>
+        <div className="flex flex-col items-center lg:items-end">
+          <ShieldCheck className="w-10 h-10 mb-4 text-white" />
           <h3 className="text-xl font-semibold mb-2">Expert Craftsmanship</h3>
-          <p className="text-blue-200 text-sm">
+          <p className="text-blue-200 text-sm max-w-xs">
             Every aquarium is thoughtfully designed for beauty and balance.
           </p>
         </div>
 
-        <div>
+        <div className="flex flex-col items-center lg:items-end">
+          <Fish className="w-10 h-10 mb-4 text-white" />
           <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>
-          <p className="text-blue-200 text-sm">
+          <p className="text-blue-200 text-sm max-w-xs">
             We use high-grade equipment and healthy aquatic species.
           </p>
         </div>
@@ -421,7 +424,7 @@ export default function Home() {
 
       {/* CENTER IMAGE */}
       <div className="flex flex-col items-center">
-        <div className=" p-1 shadow-2xl">
+        <div className="border-4 border-cyan-400 p-1 shadow-[0_0_30px_rgba(0,255,255,0.4)]">
           <Image
             src="/grid05.png"
             alt="Fish"
@@ -439,16 +442,18 @@ export default function Home() {
       {/* RIGHT FEATURES */}
       <div className="space-y-16 text-center lg:text-left">
 
-        <div>
+        <div className="flex flex-col items-center lg:items-start">
+          <FileText className="w-10 h-10 mb-4 text-white" />
           <h3 className="text-xl font-semibold mb-2">Customized Solutions</h3>
-          <p className="text-blue-200 text-sm">
+          <p className="text-blue-200 text-sm max-w-xs">
             Tailor-made designs that perfectly match your space and vision.
           </p>
         </div>
 
-        <div>
+        <div className="flex flex-col items-center lg:items-start">
+          <Wrench className="w-10 h-10 mb-4 text-white" />
           <h3 className="text-xl font-semibold mb-2">Ongoing Support</h3>
-          <p className="text-blue-200 text-sm">
+          <p className="text-blue-200 text-sm max-w-xs">
             Professional maintenance to keep your underwater world thriving.
           </p>
         </div>
