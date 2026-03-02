@@ -15,7 +15,7 @@ const Services = () => {
       </div>
 
       {/* Cards Grid */}
-      <div className="w-full max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="w-full max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
 
         {/* Card 1 */}
         <div className="text-center">

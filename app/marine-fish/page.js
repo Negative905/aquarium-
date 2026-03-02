@@ -2,72 +2,67 @@
 
 import { useState } from 'react'
 
+// ── Cart helpers (localStorage) ──────────────────────────────────────────────
+function getCart() {
+  if (typeof window === 'undefined') return []
+  try { return JSON.parse(localStorage.getItem('ocean_crown_cart') || '[]') } catch { return [] }
+}
+function saveCart(items) {
+  localStorage.setItem('ocean_crown_cart', JSON.stringify(items))
+  window.dispatchEvent(new Event('cart-updated'))
+}
+function cartAddItem(product) {
+  const cart = getCart()
+  const existing = cart.find(i => i.id === product.id && i.source === product.source)
+  const updated = existing
+    ? cart.map(i => i.id === product.id && i.source === product.source ? { ...i, qty: i.qty + 1 } : i)
+    : [...cart, { ...product, qty: 1 }]
+  saveCart(updated)
+}
+
+// ── Products ─────────────────────────────────────────────────────────────────
 const products = [
-  {
-    id: 1,
-    name: 'Clown Fish',
-    description: 'Iconic reef fish with vibrant personality.',
-    price: '₹1,500 – ₹4,000',
-    image: '/fish5.png',
-    alt: 'Betta Fish',
-  },
-  {
-    id: 2,
-    name: 'Blue Tang',
-    description: 'Striking blue tones that command attention.',
-    price: '₹6,000 – ₹12,000',
-    image: '/fish6.png',
-    alt: 'Angelfish',
-  },
-  {
-    id: 3,
-    name: 'Butterfly Fish',
-    description: 'Delicate patterns inspired by coral reefs',
-    price: '₹3,000 – ₹8,000',
-    image: '/fish7.png',
-    alt: 'Guppy',
-  },
-  {
-    id: 4,
-    name: 'Royal Gramma',
-    description: 'A colorful reef companion with bold contrast.',
-    price: '₹2,500 – ₹5,000',
-    image: '/fish8.png',
-    alt: 'Goldfish',
-  },
+  { id: 1, name: 'Clown Fish', description: 'Iconic reef fish with vibrant personality.', price: '₹1,500 – ₹4,000', numericPrice: 2750, image: '/fish5.png', alt: 'Betta Fish', size: 'Standard', color: 'N/A', source: 'marine-fish' },
+  { id: 2, name: 'Blue Tang', description: 'Striking blue tones that command attention.', price: '₹6,000 – ₹12,000', numericPrice: 9000, image: '/fish6.png', alt: 'Angelfish', size: 'Standard', color: 'N/A', source: 'marine-fish' },
+  { id: 3, name: 'Butterfly Fish', description: 'Delicate patterns inspired by coral reefs', price: '₹3,000 – ₹8,000', numericPrice: 5500, image: '/fish7.png', alt: 'Guppy', size: 'Standard', color: 'N/A', source: 'marine-fish' },
+  { id: 4, name: 'Royal Gramma', description: 'A colorful reef companion with bold contrast.', price: '₹2,500 – ₹5,000', numericPrice: 3750, image: '/fish8.png', alt: 'Goldfish', size: 'Standard', color: 'N/A', source: 'marine-fish' },
 ]
 
+// ── Page ─────────────────────────────────────────────────────────────────────
 export default function FishSpeciesPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAquariumsOpen, setIsAquariumsOpen] = useState(false)
+  const [added, setAdded] = useState({})
   const [sortBy, setSortBy] = useState('')
   const [isSortOpen, setIsSortOpen] = useState(false)
 
+  const handleAddToCart = (product) => {
+    cartAddItem(product)
+    setAdded(prev => ({ ...prev, [product.id]: true }))
+    setTimeout(() => setAdded(prev => ({ ...prev, [product.id]: false })), 1500)
+  }
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortBy === 'Price: Low to High') return a.numericPrice - b.numericPrice
+    if (sortBy === 'Price: High to Low') return b.numericPrice - a.numericPrice
+    return 0
+  })
+
   return (
     <div className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)]">
-
-
-      {/* ─── PAGE CONTENT ─── */}
       <div className="pt-16">
 
-        {/* ── HERO ── */}
+        {/* Hero */}
         <section className="py-10 text-center px-4">
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white mb-2"
-            style={{ fontFamily: 'Georgia, serif' }}
-          >
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2" style={{ fontFamily: 'Georgia, serif' }}>
             Fish & Species
           </h1>
-          <p className="text-[#8fa8c0] text-sm sm:text-base tracking-wide">
-            Freshwater Fish
-          </p>
+          <p className="text-[#8fa8c0] text-sm sm:text-base tracking-wide">Freshwater Fish</p>
         </section>
 
-        {/* ── PRODUCTS GRID ── */}
+        {/* Grid */}
         <section className="px-4 sm:px-8 lg:px-16 pb-20">
           <div className="max-w-5xl mx-auto">
 
-            {/* Sort By */}
+            {/* Sort */}
             <div className="flex justify-end mb-6">
               <div className="relative">
                 <button
@@ -75,21 +70,15 @@ export default function FishSpeciesPage() {
                   className="flex items-center gap-2 bg-white text-black text-xs px-3 py-2 rounded-sm shadow-sm hover:bg-gray-50 transition-colors"
                 >
                   Sort by
-                  <svg
-                    className={`w-3 h-3 transition-transform ${isSortOpen ? 'rotate-180' : ''}`}
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}
-                  >
+                  <svg className={`w-3 h-3 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 {isSortOpen && (
                   <div className="absolute top-full right-0 mt-1 bg-white shadow-lg rounded-sm z-50 min-w-[150px]">
-                    {['Price: Low to High', 'Price: High to Low', 'Newest First'].map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => { setSortBy(option); setIsSortOpen(false) }}
-                        className="block w-full text-left px-4 py-2.5 text-black text-xs hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
-                      >
+                    {['Price: Low to High', 'Price: High to Low'].map((option) => (
+                      <button key={option} onClick={() => { setSortBy(option); setIsSortOpen(false) }}
+                        className="block w-full text-left px-4 py-2.5 text-black text-xs hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
                         {option}
                       </button>
                     ))}
@@ -98,50 +87,44 @@ export default function FishSpeciesPage() {
               </div>
             </div>
 
-            {/* Grid */}
+            {/* Products */}
             <div className="grid grid-cols-2 gap-x-10 gap-y-24 sm:gap-x-14 sm:gap-y-28">
-              {products.map((product) => (
+              {sortedProducts.map((product) => (
                 <div key={product.id} className="bg-[#0a1e38] rounded-sm overflow-hidden shadow-md group">
-                  {/* Product Image */}
                   <div className="relative w-full overflow-hidden" style={{ paddingBottom: '105%' }}>
                     <img
                       src={product.image}
                       alt={product.alt}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      onError={(e) => {
-                        e.target.style.display = 'none'
-                        e.target.parentElement.style.background = '#0a2a4a'
-                      }}
+                      onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.style.background = '#0a2a4a' }}
                     />
-                    {/* Placeholder background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-teal-900 flex items-center justify-center -z-10">
                       <svg className="w-16 h-16 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                       </svg>
                     </div>
                   </div>
-
-                  {/* Product Info */}
                   <div className="p-4 text-center">
-                    <h3
-                      className="text-sm sm:text-base font-bold text-white mb-1"
-                      style={{ fontFamily: 'Georgia, serif' }}
-                    >
+                    <h3 className="text-sm sm:text-base font-bold text-white mb-1" style={{ fontFamily: 'Georgia, serif' }}>
                       {product.name}
                     </h3>
-                    <p className="text-[#8fa8c0] text-xs sm:text-sm mb-2 leading-relaxed">
-                      {product.description}
-                    </p>
-                    <p className="text-white font-bold text-sm sm:text-base mb-3">
-                      {product.price}
-                    </p>
-                    <button className="w-full border border-white/30 bg-transparent text-white text-xs sm:text-sm py-2 px-4 hover:bg-white hover:text-[#0d1e35] transition-colors font-medium tracking-wide">
-                      Add to cart
+                    <p className="text-[#8fa8c0] text-xs sm:text-sm mb-2 leading-relaxed">{product.description}</p>
+                    <p className="text-white font-bold text-sm sm:text-base mb-3">{product.price}</p>
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className={`border border-white/30 text-xs mt-3 mb-10 sm:text-sm py-2 px-12 transition-colors font-medium tracking-wide rounded-2xl ${
+                        added[product.id]
+                          ? 'bg-green-500 border-green-500 text-white'
+                          : 'text-black bg-white hover:bg-white hover:text-[#0d1e35]'
+                      }`}
+                    >
+                      {added[product.id] ? '✓ Added!' : 'Add to cart'}
                     </button>
                   </div>
                 </div>
               ))}
             </div>
+
           </div>
         </section>
 

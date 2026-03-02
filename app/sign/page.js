@@ -131,7 +131,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Sign Up Button */}
-          <button className="w-full bg-white text-[#1a5eab] font-semibold text-sm py-3 rounded-md hover:bg-blue-50 transition-colors mb-4">
+          <button className="w-full bg-white text-[#242222] font-semibold text-sm py-3 rounded-md hover:bg-blue-50 transition-colors mb-4">
             Sign Up
           </button>
 

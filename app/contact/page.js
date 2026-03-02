@@ -36,15 +36,6 @@ const slideRight = {
   },
 };
 
-const slideLeft = {
-  hidden: { opacity: 0, x: 40 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
-  },
-};
-
 const cardVariant = {
   hidden: { opacity: 0, y: 50, scale: 0.97 },
   visible: {
@@ -60,6 +51,9 @@ const footerItem = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
+const CONTACT_EMAIL = 'nikhilchauhan6619@gmail.com';
+const FORMSPREE_URL = 'https://formspree.io/f/xqedowzd';
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ContactPage() {
@@ -67,24 +61,57 @@ export default function ContactPage() {
     fullName: '', number: '', email: '', message: '', subscribeEmail: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ fullName: '', number: '', email: '', message: '', subscribeEmail: '' });
-    }, 2500);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.fullName,
+          phone: formData.number,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({ fullName: '', number: '', email: '', message: '', subscribeEmail: '' });
+        }, 2500);
+      } else {
+        const data = await response.json();
+        setError(data?.errors?.[0]?.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const inputClass =
-    'w-full px-3 py-2 rounded text-white text-sm placeholder-blue-300 focus:outline-none border border-blue-400 transition-all duration-200 focus:border-white focus:ring-1 focus:ring-white/30';
-  const inputStyle = { background: 'rgba(255,255,255,0.1)' };
+    'w-full px-3 py-2 rounded text-white text-sm placeholder-blue-300 focus:outline-none transition-all duration-200 focus:ring-1 focus:ring-white/30';
+  const inputStyle = {
+    background: 'rgba(255,255,255,0.1)',
+    border: '1px solid rgba(255,255,255,0.3)',
+  };
 
   const contactItems = [
     {
@@ -93,7 +120,7 @@ export default function ContactPage() {
           <path d="M3 8l9 6 9-6M3 8h18v13H3V8z" />
         </svg>
       ),
-      text: 'oceancrown@gmail.com',
+      text: CONTACT_EMAIL,
     },
     {
       icon: (
@@ -121,7 +148,6 @@ export default function ContactPage() {
         className="flex-1 relative py-16 px-6 overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #1a4fa0 0%, #1a3a7a 40%, #0f2550 100%)' }}
       >
-        {/* Subtle animated background orb */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
           initial={{ opacity: 0 }}
@@ -195,8 +221,12 @@ export default function ContactPage() {
 
           {/* ── Right – Contact Form Card ── */}
           <motion.div
-            className="md:col-span-2 rounded-lg mt-24 p-8 border border-blue-400"
-            style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(4px)' }}
+            className="md:col-span-2 rounded-lg mt-24 p-8"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(4px)',
+              border: '1px solid rgba(255,255,255,0.3)',
+            }}
             variants={cardVariant}
             initial="hidden"
             animate="visible"
@@ -273,6 +303,7 @@ export default function ContactPage() {
                           placeholder={field.placeholder}
                           className={inputClass}
                           style={inputStyle}
+                          required={field.name === 'fullName'}
                         />
                       </motion.div>
                     ))}
@@ -288,6 +319,7 @@ export default function ContactPage() {
                       placeholder="Enter your email"
                       className={inputClass}
                       style={inputStyle}
+                      required
                     />
                   </motion.div>
 
@@ -301,17 +333,34 @@ export default function ContactPage() {
                       rows={6}
                       className={`${inputClass} resize-none`}
                       style={inputStyle}
+                      required
                     />
                   </motion.div>
+
+                  {/* Error message */}
+                  <AnimatePresence>
+                    {error && (
+                      <motion.p
+                        className="text-red-300 text-sm"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {error}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
 
                   <motion.div variants={fadeUp} initial="hidden" animate="visible" custom={4}>
                     <motion.button
                       type="submit"
-                      className="bg-white text-gray-800 text-sm font-semibold px-5 py-2 rounded hover:bg-gray-100 transition-colors"
-                      whileHover={{ scale: 1.03, boxShadow: '0 4px 20px rgba(255,255,255,0.25)' }}
-                      whileTap={{ scale: 0.97 }}
+                      disabled={isLoading}
+                      className="bg-white text-gray-800 text-sm font-semibold px-5 py-2 rounded hover:bg-gray-100 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                      whileHover={!isLoading ? { scale: 1.03, boxShadow: '0 4px 20px rgba(255,255,255,0.25)' } : {}}
+                      whileTap={!isLoading ? { scale: 0.97 } : {}}
                     >
-                      Send your message
+                      {isLoading ? 'Sending…' : 'Send your message'}
                     </motion.button>
                   </motion.div>
                 </motion.form>
@@ -478,7 +527,7 @@ export default function ContactPage() {
                       <path d="M3 8l9 6 9-6M3 8h18v13H3V8z" />
                     </svg>
                   ),
-                  text: 'oceancrown@gmail.com',
+                  text: CONTACT_EMAIL,
                 },
                 {
                   icon: (

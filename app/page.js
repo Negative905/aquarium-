@@ -54,9 +54,8 @@ export default function Home() {
                 >
                   Explore Now
                 </button>
-                {/* ✅ Leads to /contact page */}
                 <button
-                  onClick={() => router.push('/contact')}
+                  onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
                   className="px-6 sm:px-8 py-2.5 sm:py-3 bg-gray-700 text-white font-medium hover:bg-gray-800 transition-all duration-300 text-xs sm:text-sm w-full sm:w-auto">
                   Contact Us
                 </button>
@@ -77,7 +76,6 @@ export default function Home() {
               </p>
             </div>
             <div className="text-center">
-              {/* ✅ Leads to /about page */}
               <button
                 onClick={() => router.push('/about')}
                 className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-black font-medium hover:bg-blue-50 transition-all duration-300 text-xs sm:text-sm">
@@ -99,16 +97,20 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { src: '/grid01.png', label: 'Aquariums' },
-                { src: '/grid02.png', label: 'Fishes & Species' },
-                { src: '/grid03.png', label: 'Plants & Corals' },
-                { src: '/grid04.png', label: 'Services' },
-              ].map(({ src, label }) => (
+                { src: '/grid01.png', label: 'Aquariums', route: '/fresh' },
+                { src: '/grid02.png', label: 'Fishes & Species', route: '/fish-species' },
+                { src: '/grid03.png', label: 'Plants & Corals', route: '/plants' },
+                { src: '/grid04.png', label: 'Services', route: '/services' },
+              ].map(({ src, label, route }) => (
                 <div key={label} className="relative group overflow-hidden rounded-lg" style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}>
                   <Image src={src} alt={label} width={500} height={500} className="w-full h-72 object-cover group-hover:scale-110 transition duration-500" />
                   <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center">
                     <h3 className="text-lg font-semibold mb-3">{label}</h3>
-                    <button className="bg-white text-black text-xs px-4 py-1 rounded hover:bg-gray-100 transition">View More</button>
+                    <button
+                      onClick={() => route && router.push(route)}
+                      className="bg-white text-black text-xs px-4 py-1 rounded hover:bg-gray-100 transition">
+                      View More
+                    </button>
                   </div>
                 </div>
               ))}
@@ -142,7 +144,6 @@ export default function Home() {
                 <div className="border-4 border-cyan-400 p-1 shadow-[0_0_30px_rgba(0,255,255,0.4)]">
                   <Image src="/grid05.png" alt="Fish" width={450} height={500} className="object-cover" />
                 </div>
-                {/* ✅ Leads to /login page */}
                 <button
                   onClick={() => router.push('/login')}
                   className="mt-8 px-8 py-3 bg-white text-black font-medium hover:bg-blue-50 transition duration-300">
