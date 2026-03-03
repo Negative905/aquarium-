@@ -34,32 +34,11 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white">
-      {/* Navbar — identical to login */}
-      <nav className="flex items-center justify-between px-8 py-3 border-b border-gray-200 bg-white">
-        <div className="flex items-center gap-2">
-          <div className="text-blue-800">
-            <AquariumIcon />
-          </div>
-          <div className="text-xs font-bold tracking-widest text-blue-900 uppercase leading-none">Ocean Crown</div>
-        </div>
-        <ul className="flex items-center gap-6 text-sm text-gray-700 font-medium">
-          {["Home", "About us", "Aquariums", "Fish & Species", "Plants & Corals", "Services", "Contact"].map(item => (
-            <li key={item} className="cursor-pointer hover:text-blue-700 transition-colors">{item}</li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-2">
-          <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </button>
-          <button className="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center text-white hover:bg-blue-800">
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          </button>
-        </div>
-      </nav>
+      
 
       {/* Main Sign Up Section */}
       <main className="flex-1 bg-[#1a5eab] flex items-center justify-center py-16">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm mx-auto px-4 mt-36">
           <h1 className="text-white text-3xl font-bold text-center mb-1">Sign Up</h1>
           <p className="text-blue-200 text-sm text-center mb-6">Create an account to get started</p>
 

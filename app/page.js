@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import { ShieldCheck, Fish, FileText, Wrench } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -9,69 +8,70 @@ export default function Home() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen">
 
-      {/* Background GIF */}
-      <div className="fixed inset-0 -z-10 h-screen overflow-hidden">
-        <div className="w-full h-full relative">
-          <Image
-            src="/tortoise.gif"
-            alt="Sea turtle swimming"
-            fill
-            className="object-cover"
-            priority
-            unoptimized
-          />
+      {/* Hero Section with Full Screen Video */}
+      <section id="home" className="relative w-screen h-screen overflow-hidden">
+
+        {/* Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-contain scale-[3.8] object-center"
+        >
+          <source src="/tortoise2.mp4" type="video/mp4" />
+        </video>
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-cyan-400/20 z-[1]" />
+
+        {/* Hero Content */}
+        <div className="absolute inset-0 z-[2] flex items-center px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black mb-4 sm:mb-6 tracking-tight leading-none"
+              style={{ fontFamily: 'Georgia, serif' }}
+            >
+              OCEAN CROWN
+            </h1>
+            <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+              <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                Elevating spaces with the quiet elegance of the ocean.
+              </p>
+              <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                Custom aquariums designed to inspire calm, beauty, and balance.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+              <button
+                onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-black font-medium hover:bg-gray-100 transition-all duration-300 shadow-md text-xs sm:text-sm w-full sm:w-auto"
+              >
+                Explore Now
+              </button>
+              <button
+                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 sm:px-8 py-2.5 sm:py-3 bg-gray-700 text-white font-medium hover:bg-gray-800 transition-all duration-300 text-xs sm:text-sm w-full sm:w-auto">
+                Contact Us
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/30 via-teal-400/20 to-cyan-500/30"></div>
-      </div>
+      </section>
 
       {/* Scrollable Content */}
       <div className="relative z-10">
-
-        {/* Hero Section */}
-        <section id="home" className="min-h-screen flex items-center pt-20">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h1
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black mb-4 sm:mb-6 tracking-tight leading-none text-pretty"
-                style={{ fontFamily: 'Georgia, serif' }}
-              >
-                OCEAN CROWN
-              </h1>
-              <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-                <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed font-normal text-pretty" style={{ fontFamily: 'Georgia, serif' }}>
-                  Elevating spaces with the quiet elegance of the ocean.
-                </p>
-                <p className="text-black text-sm sm:text-base md:text-lg leading-relaxed font-normal text-pretty" style={{ fontFamily: 'Georgia, serif' }}>
-                  Custom aquariums designed to inspire calm, beauty, and balance.
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <button
-                  onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-black font-medium hover:bg-gray-100 transition-all duration-300 shadow-md text-xs sm:text-sm w-full sm:w-auto"
-                >
-                  Explore Now
-                </button>
-                <button
-                  onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 sm:px-8 py-2.5 sm:py-3 bg-gray-700 text-white font-medium hover:bg-gray-800 transition-all duration-300 text-xs sm:text-sm w-full sm:w-auto">
-                  Contact Us
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Crafting Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-600 to-blue-700 text-white" id="about">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-pretty">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
                 Crafting Underwater Masterpieces
               </h2>
-              <p className="text-blue-100 text-sm sm:text-base md:text-lg max-w-3xl mx-auto text-pretty">
+              <p className="text-blue-100 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
                 Discover the art and science behind creating stunning aquatic environments that bring the ocean's majesty into your home or office.
               </p>
             </div>
@@ -170,8 +170,8 @@ export default function Home() {
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-900 to-blue-950 text-white" id="plants">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 text-pretty">Our Aquatic Creations</h2>
-              <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto text-pretty">Explore some of our finest custom aquariums.</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">Our Aquatic Creations</h2>
+              <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto">Explore some of our finest custom aquariums.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {['/grid1.png', '/grid2.png', '/grid3.png', '/grid4.png'].map((src, i) => (
@@ -190,7 +190,7 @@ export default function Home() {
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-950 to-blue-900 text-white">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 text-pretty">What Our Clients Say?</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">What Our Clients Say?</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
               {[
@@ -219,8 +219,8 @@ export default function Home() {
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-900 to-blue-950 text-white" id="contact">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-pretty">Get In Touch</h2>
-              <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto text-pretty">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Get In Touch</h2>
+              <p className="text-blue-100 text-sm sm:text-base max-w-3xl mx-auto">
                 Ready to transform your space with a stunning aquarium? Contact us today to discuss your custom aquarium needs.
               </p>
             </div>

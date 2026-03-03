@@ -1,7 +1,7 @@
 "use client";
+import Navbar from "@/components/Navbar";
 import { useState } from "react";
 
-// Simple SVG icons inline to avoid import issues
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 48 48">
     <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
@@ -18,27 +18,6 @@ const EyeIcon = () => (
   </svg>
 );
 
-const AquariumIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-    <rect x="2" y="4" width="20" height="16" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M2 15h20M6 15c0-3 2-5 4-4s3 4 5 3 3-4 5-4"/>
-    <circle cx="17" cy="9" r="1" fill="currentColor"/>
-  </svg>
-);
-
-const FacebookIcon = () => (
-  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-);
-const InstagramIcon = () => (
-  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-);
-const TwitterXIcon = () => (
-  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-);
-const YoutubeIcon = () => (
-  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.47A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
-);
-
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -47,34 +26,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white">
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-3 border-b border-gray-200 bg-white">
-        <div className="flex items-center gap-2">
-          <div className="text-blue-800">
-            <AquariumIcon />
-          </div>
-          <div>
-            <div className="text-xs font-bold tracking-widest text-blue-900 uppercase leading-none">Ocean Crown</div>
-          </div>
-        </div>
-        <ul className="flex items-center gap-6 text-sm text-gray-700 font-medium">
-          {["Home", "About us", "Aquariums", "Fish & Species", "Plants & Corals", "Services", "Contact"].map(item => (
-            <li key={item} className="cursor-pointer hover:text-blue-700 transition-colors">{item}</li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-2">
-          <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </button>
-          <button className="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center text-white hover:bg-blue-800">
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          </button>
-        </div>
-      </nav>
+    
 
-      {/* Main Login Section */}
       <main className="flex-1 bg-[#1a5eab] flex items-center justify-center py-16">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm mx-auto px-4 mt-48">
           <h1 className="text-white text-3xl font-bold text-center mb-1">Login</h1>
           <p className="text-blue-200 text-sm text-center mb-6">Hi, Welcome back</p>
 
