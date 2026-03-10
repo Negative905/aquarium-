@@ -133,12 +133,6 @@ export default function CartPage() {
       animate="visible"
     >
       <div className="w-full max-w-4xl mt-24">
-        <motion.h1
-          className="text-4xl font-bold text-white mb-6"
-          variants={headingVariant}
-        >
-          Your Cart
-        </motion.h1>
 
         <AnimatePresence mode="wait">
           {items.length === 0 ? (
@@ -176,278 +170,287 @@ export default function CartPage() {
           ) : (
             <motion.div
               key="cart"
-              className="flex flex-col lg:flex-row gap-6"
               initial="hidden"
               animate="visible"
               variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
             >
-              {/* ── Cart Items ── */}
-              <motion.div
-                className="flex-1 bg-white/15 border border-white/20 flex flex-col overflow-hidden"
-                variants={columnVariant}
+              {/* Heading — only visible when cart has items */}
+              <motion.h1
+                className="text-4xl font-bold text-white mb-6"
+                variants={headingVariant}
               >
-                <AnimatePresence initial={false}>
-                  {items.map((item, index) => (
-                    <motion.div
-                      key={`${item.id}-${item.source}`}
-                      variants={itemVariant}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      layout
-                    >
-                      <div className="p-5 flex items-center gap-5">
-                        {/* Product image with hover zoom */}
-                        <motion.img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-28 h-24 rounded-lg object-cover flex-shrink-0 bg-[#0a2a4a]"
-                          onError={(e) => { e.target.style.display = 'none' }}
-                          whileHover={{ scale: 1.06 }}
-                          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        />
+                Your Cart
+              </motion.h1>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-start">
-                            <h3 className="text-white font-semibold text-base leading-snug">{item.name}</h3>
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* ── Cart Items ── */}
+                <motion.div
+                  className="flex-1 bg-white/15 border border-white/20 flex flex-col overflow-hidden"
+                  variants={columnVariant}
+                >
+                  <AnimatePresence initial={false}>
+                    {items.map((item, index) => (
+                      <motion.div
+                        key={`${item.id}-${item.source}`}
+                        variants={itemVariant}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        layout
+                      >
+                        <div className="p-5 flex items-center gap-5">
+                          {/* Product image with hover zoom */}
+                          <motion.img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-28 h-24 rounded-lg object-cover flex-shrink-0 bg-[#0a2a4a]"
+                            onError={(e) => { e.target.style.display = 'none' }}
+                            whileHover={{ scale: 1.06 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                          />
 
-                            {/* Delete button */}
-                            <motion.button
-                              onClick={() => handleRemove(item.id, item.source)}
-                              className="text-white/50 hover:text-red-400 ml-2 flex-shrink-0 mt-0.5 transition-colors"
-                              whileHover={{ scale: 1.15, rotate: 8 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <polyline points="3 6 5 6 21 6" />
-                                <path d="M19 6l-1 14H6L5 6" />
-                                <path d="M10 11v6M14 11v6" />
-                                <path d="M9 6V4h6v2" />
-                              </svg>
-                            </motion.button>
-                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-start">
+                              <h3 className="text-white font-semibold text-base leading-snug">{item.name}</h3>
 
-                          <p className="text-white/70 text-sm mt-1"><span className="font-medium">Size:</span> {item.size}</p>
-                          <p className="text-white/70 text-sm mt-1"><span className="font-medium">Color:</span> {item.color}</p>
-
-                          <div className="flex justify-between items-center mt-3">
-                            <motion.span
-                              key={item.numericPrice * item.qty}
-                              className="text-white font-bold text-base"
-                              initial={{ scale: 1.15, color: "#67e8f9" }}
-                              animate={{ scale: 1, color: "#ffffff" }}
-                              transition={{ duration: 0.3 }}
-                            >
-                              {fmt(item.numericPrice)}
-                            </motion.span>
-
-                            {/* Qty controls */}
-                            <div className="flex items-center gap-4 text-white text-base">
+                              {/* Delete button */}
                               <motion.button
-                                onClick={() => handleUpdateQty(item.id, item.source, -1)}
-                                className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors leading-none text-lg"
-                                whileHover={{ scale: 1.15 }}
-                                whileTap={{ scale: 0.85 }}
+                                onClick={() => handleRemove(item.id, item.source)}
+                                className="text-white/50 hover:text-red-400 ml-2 flex-shrink-0 mt-0.5 transition-colors"
+                                whileHover={{ scale: 1.15, rotate: 8 }}
+                                whileTap={{ scale: 0.9 }}
                               >
-                                -
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <polyline points="3 6 5 6 21 6" />
+                                  <path d="M19 6l-1 14H6L5 6" />
+                                  <path d="M10 11v6M14 11v6" />
+                                  <path d="M9 6V4h6v2" />
+                                </svg>
                               </motion.button>
+                            </div>
 
-                              <AnimatePresence mode="wait">
-                                <motion.span
-                                  key={item.qty}
-                                  initial={{ opacity: 0, y: -6 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: 6 }}
-                                  transition={{ duration: 0.18 }}
-                                  className="w-4 text-center"
+                            <p className="text-white/70 text-sm mt-1"><span className="font-medium">Size:</span> {item.size}</p>
+                            <p className="text-white/70 text-sm mt-1"><span className="font-medium">Color:</span> {item.color}</p>
+
+                            <div className="flex justify-between items-center mt-3">
+                              <motion.span
+                                key={item.numericPrice * item.qty}
+                                className="text-white font-bold text-base"
+                                initial={{ scale: 1.15, color: "#67e8f9" }}
+                                animate={{ scale: 1, color: "#ffffff" }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                {fmt(item.numericPrice)}
+                              </motion.span>
+
+                              {/* Qty controls */}
+                              <div className="flex items-center gap-4 text-white text-base">
+                                <motion.button
+                                  onClick={() => handleUpdateQty(item.id, item.source, -1)}
+                                  className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors leading-none text-lg"
+                                  whileHover={{ scale: 1.15 }}
+                                  whileTap={{ scale: 0.85 }}
                                 >
-                                  {item.qty}
-                                </motion.span>
-                              </AnimatePresence>
+                                  -
+                                </motion.button>
 
-                              <motion.button
-                                onClick={() => handleUpdateQty(item.id, item.source, 1)}
-                                className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors leading-none text-lg"
-                                whileHover={{ scale: 1.15 }}
-                                whileTap={{ scale: 0.85 }}
-                              >
-                                +
-                              </motion.button>
+                                <AnimatePresence mode="wait">
+                                  <motion.span
+                                    key={item.qty}
+                                    initial={{ opacity: 0, y: -6 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 6 }}
+                                    transition={{ duration: 0.18 }}
+                                    className="w-4 text-center"
+                                  >
+                                    {item.qty}
+                                  </motion.span>
+                                </AnimatePresence>
+
+                                <motion.button
+                                  onClick={() => handleUpdateQty(item.id, item.source, 1)}
+                                  className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors leading-none text-lg"
+                                  whileHover={{ scale: 1.15 }}
+                                  whileTap={{ scale: 0.85 }}
+                                >
+                                  +
+                                </motion.button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      {index < items.length - 1 && (
-                        <div className="px-5"><div className="border-t border-white/20" /></div>
-                      )}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </motion.div>
-
-              {/* ── Order Summary ── */}
-              <motion.div
-                className="w-full lg:w-80 bg-white/15 border border-white/20 p-6 flex flex-col gap-3 h-fit"
-                variants={columnVariant}
-              >
-                <h2 className="text-white font-bold text-base">Order Summary</h2>
-
-                <div className="flex flex-col gap-2.5 text-sm">
-                  {summaryRows.map(({ label, value, color }, i) => (
-                    <motion.div
-                      key={label}
-                      className="flex justify-between"
-                      custom={i}
-                      variants={summaryRowVariant}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <span className="text-white/70">{label}</span>
-                      <motion.span
-                        key={value}
-                        className={`font-semibold ${color}`}
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.25 }}
-                      >
-                        {value}
-                      </motion.span>
-                    </motion.div>
-                  ))}
-
-                  <div className="border-t border-white/20 pt-2.5 flex justify-between font-bold text-white text-sm">
-                    <span>Total</span>
-                    <AnimatePresence mode="wait">
-                      <motion.span
-                        key={total}
-                        initial={{ opacity: 0, scale: 0.85 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.85 }}
-                        transition={{ duration: 0.25, type: "spring", stiffness: 300 }}
-                      >
-                        {fmt(total)}
-                      </motion.span>
-                    </AnimatePresence>
-                  </div>
-                </div>
-
-                {/* Promo code */}
-                <AnimatePresence mode="wait">
-                  {!appliedPromo ? (
-                    <motion.div
-                      key="promo-input"
-                      variants={promoVariant}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="flex flex-col gap-1"
-                    >
-                      <div className="flex gap-0 border border-white/20 rounded overflow-hidden">
-                        <input
-                          type="text"
-                          value={promo}
-                          onChange={(e) => { setPromo(e.target.value); setPromoError(""); }}
-                          onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                          placeholder="Add promo code"
-                          className="flex-1 px-3 py-2 text-sm outline-none bg-transparent text-white placeholder-white/40"
-                        />
-                        <motion.button
-                          onClick={handleApplyPromo}
-                          className="bg-white text-gray-800 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition-colors whitespace-nowrap"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          Apply
-                        </motion.button>
-                      </div>
-
-                      <AnimatePresence>
-                        {promoError && (
-                          <motion.p
-                            className="text-red-400 text-xs px-1"
-                            initial={{ opacity: 0, y: -4 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -4 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            {promoError}
-                          </motion.p>
+                        {index < items.length - 1 && (
+                          <div className="px-5"><div className="border-t border-white/20" /></div>
                         )}
-                      </AnimatePresence>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
 
-                      {/* Available codes */}
-                      <div className="mt-1 bg-white/10 rounded p-2.5">
-                        <p className="text-white/60 text-xs mb-1.5 font-medium">Available Promo Codes:</p>
-                        <div className="flex flex-col gap-1">
-                          {Object.entries(PROMO_CODES).map(([code, info], i) => (
-                            <motion.div
-                              key={code}
-                              className="flex justify-between items-center"
-                              initial={{ opacity: 0, x: -8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: i * 0.06 }}
-                            >
-                              <motion.button
-                                onClick={() => setPromo(code)}
-                                className="text-cyan-300 text-xs font-mono hover:text-cyan-100 transition-colors"
-                                whileHover={{ scale: 1.05, x: 2 }}
-                                whileTap={{ scale: 0.97 }}
-                              >
-                                {code}
-                              </motion.button>
-                              <span className="text-white/50 text-xs">{info.label} — {info.description}</span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="promo-applied"
-                      variants={promoVariant}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="flex flex-col gap-1"
-                    >
-                      <div className="flex items-center justify-between bg-green-500/20 border border-green-400/30 rounded px-3 py-2">
-                        <div>
-                          <p className="text-green-300 text-xs font-semibold">{promoSuccess}</p>
-                          <p className="text-white/50 text-xs">{appliedPromo.description}</p>
-                        </div>
-                        <motion.button
-                          onClick={handleRemovePromo}
-                          className="text-white/50 hover:text-white text-lg leading-none ml-2"
-                          whileHover={{ scale: 1.2, rotate: 90 }}
-                          whileTap={{ scale: 0.9 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          ×
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Checkout button */}
-                <motion.button
-                  onClick={() => {
-                    localStorage.setItem("orderSummary", JSON.stringify({
-                      subtotal, discount, promoDiscount,
-                      promoCode: appliedPromo?.code || "",
-                      deliveryFee: DELIVERY_FEE, total,
-                    }));
-                    router.push('/shipping');
-                  }}
-                  className="w-full bg-white text-gray-800 py-2.5 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
-                  whileHover={{ scale: 1.02, boxShadow: "0 4px 24px rgba(255,255,255,0.15)" }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                {/* ── Order Summary ── */}
+                <motion.div
+                  className="w-full lg:w-80 bg-white/15 border border-white/20 p-6 flex flex-col gap-3 h-fit"
+                  variants={columnVariant}
                 >
-                  Go to Checkout →
-                </motion.button>
-              </motion.div>
+                  <h2 className="text-white font-bold text-base">Order Summary</h2>
+
+                  <div className="flex flex-col gap-2.5 text-sm">
+                    {summaryRows.map(({ label, value, color }, i) => (
+                      <motion.div
+                        key={label}
+                        className="flex justify-between"
+                        custom={i}
+                        variants={summaryRowVariant}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        <span className="text-white/70">{label}</span>
+                        <motion.span
+                          key={value}
+                          className={`font-semibold ${color}`}
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.25 }}
+                        >
+                          {value}
+                        </motion.span>
+                      </motion.div>
+                    ))}
+
+                    <div className="border-t border-white/20 pt-2.5 flex justify-between font-bold text-white text-sm">
+                      <span>Total</span>
+                      <AnimatePresence mode="wait">
+                        <motion.span
+                          key={total}
+                          initial={{ opacity: 0, scale: 0.85 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.85 }}
+                          transition={{ duration: 0.25, type: "spring", stiffness: 300 }}
+                        >
+                          {fmt(total)}
+                        </motion.span>
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  {/* Promo code */}
+                  <AnimatePresence mode="wait">
+                    {!appliedPromo ? (
+                      <motion.div
+                        key="promo-input"
+                        variants={promoVariant}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="flex flex-col gap-1"
+                      >
+                        <div className="flex gap-0 border border-white/20 rounded overflow-hidden">
+                          <input
+                            type="text"
+                            value={promo}
+                            onChange={(e) => { setPromo(e.target.value); setPromoError(""); }}
+                            onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                            placeholder="Add promo code"
+                            className="flex-1 px-3 py-2 text-sm outline-none bg-transparent text-white placeholder-white/40"
+                          />
+                          <motion.button
+                            onClick={handleApplyPromo}
+                            className="bg-white text-gray-800 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition-colors whitespace-nowrap"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            Apply
+                          </motion.button>
+                        </div>
+
+                        <AnimatePresence>
+                          {promoError && (
+                            <motion.p
+                              className="text-red-400 text-xs px-1"
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -4 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              {promoError}
+                            </motion.p>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Available codes */}
+                        <div className="mt-1 bg-white/10 rounded p-2.5">
+                          <p className="text-white/60 text-xs mb-1.5 font-medium">Available Promo Codes:</p>
+                          <div className="flex flex-col gap-1">
+                            {Object.entries(PROMO_CODES).map(([code, info], i) => (
+                              <motion.div
+                                key={code}
+                                className="flex justify-between items-center"
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.06 }}
+                              >
+                                <motion.button
+                                  onClick={() => setPromo(code)}
+                                  className="text-cyan-300 text-xs font-mono hover:text-cyan-100 transition-colors"
+                                  whileHover={{ scale: 1.05, x: 2 }}
+                                  whileTap={{ scale: 0.97 }}
+                                >
+                                  {code}
+                                </motion.button>
+                                <span className="text-white/50 text-xs">{info.label} — {info.description}</span>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="promo-applied"
+                        variants={promoVariant}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="flex flex-col gap-1"
+                      >
+                        <div className="flex items-center justify-between bg-green-500/20 border border-green-400/30 rounded px-3 py-2">
+                          <div>
+                            <p className="text-green-300 text-xs font-semibold">{promoSuccess}</p>
+                            <p className="text-white/50 text-xs">{appliedPromo.description}</p>
+                          </div>
+                          <motion.button
+                            onClick={handleRemovePromo}
+                            className="text-white/50 hover:text-white text-lg leading-none ml-2"
+                            whileHover={{ scale: 1.2, rotate: 90 }}
+                            whileTap={{ scale: 0.9 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
+                            ×
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Checkout button */}
+                  <motion.button
+                    onClick={() => {
+                      localStorage.setItem("orderSummary", JSON.stringify({
+                        subtotal, discount, promoDiscount,
+                        promoCode: appliedPromo?.code || "",
+                        deliveryFee: DELIVERY_FEE, total,
+                      }));
+                      router.push('/shipping');
+                    }}
+                    className="w-full bg-white text-gray-800 py-2.5 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+                    whileHover={{ scale: 1.02, boxShadow: "0 4px 24px rgba(255,255,255,0.15)" }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                  >
+                    Go to Checkout →
+                  </motion.button>
+                </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -99,7 +99,7 @@ export default function Footer() {
                 transition={{ delay: i * 0.05 + 0.3, duration: 0.4 }}
               >
                 <motion.a
-                  href="#"
+                  href="/services"
                   className="hover:text-white transition-colors"
                   whileHover={{ x: 4 }}
                   transition={{ type: 'spring', stiffness: 300 }}
