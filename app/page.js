@@ -247,7 +247,7 @@ export default function Home() {
                 { name: 'Priya M', text: 'Exceptional quality and maintenance service. Our tank has become the centerpiece of the space.' },
                 { name: 'Rain Harrison', text: 'From consultation to installation, the expertise was evident. Our aquarium is truly breathtaking.' },
               ].map((t, idx) => (
-                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 sm:p-8 hover:bg-white/15 transition-all duration-300">
+                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 sm:p-8 hover:bg-white/15 transition-all duration-300 shadow-lg shadow-black/40">
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
