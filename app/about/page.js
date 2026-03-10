@@ -59,7 +59,7 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-stretch">
 
             {/* Coral Image */}
-            <div className="relative h-72 md:h-auto min-h-[500px] overflow-hidden">
+            <div className="relative h-72 md:h-auto min-h-[500px] overflow-hidden ml-5">
               <Image
                 src="/about-us2.png"
                 alt="Coral reef"

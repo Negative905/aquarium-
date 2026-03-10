@@ -12,8 +12,6 @@ export default function Home() {
 
       {/* Hero Section with Full Screen Video */}
       <section id="home" className="relative w-screen h-screen overflow-hidden">
-
-        {/* Video */}
         <video
           autoPlay
           loop
@@ -23,11 +21,7 @@ export default function Home() {
         >
           <source src="/tortoise2.mp4" type="video/mp4" />
         </video>
-
-        {/* Overlay */}
         <div className="absolute inset-0 bg-cyan-400/20 z-[1]" />
-
-        {/* Hero Content */}
         <div className="absolute inset-0 z-[2] flex items-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             <h1
@@ -61,11 +55,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Scrollable Content */}
-      <div className="relative z-10">
+      {/* ── ALL SCROLLABLE SECTIONS — single wrapper with ocean bg image ── */}
+      <div
+  className="relative z-10"
+  style={{
+    backgroundImage: "url('/home-back1.jpg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'scroll',   // ← was 'local'
+  }}
+>
+  <div
+    style={{
+      position: 'absolute',
+      top: 0, left: 0, right: 0, bottom: 0,
+      background: 'rgba(0, 8, 24, 0.30)',  // ← was 0.52
+      pointerEvents: 'none',
+      zIndex: 0,
+    }}
+  />
 
         {/* Crafting Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-600 to-blue-700 text-white" id="about">
+        <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }} id="about">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
@@ -86,7 +98,7 @@ export default function Home() {
         </section>
 
         {/* Featured Categories */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-700 to-blue-800 text-white" id="aquariums">
+        <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }} id="aquariums">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-4 mb-4">
@@ -97,20 +109,57 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { src: '/grid01.png', label: 'Aquariums', route: '/fresh' },
-                { src: '/grid02.png', label: 'Fishes & Species', route: '/fish-species' },
-                { src: '/grid03.png', label: 'Plants & Corals', route: '/plants' },
-                { src: '/grid04.png', label: 'Services', route: '/services' },
-              ].map(({ src, label, route }) => (
-                <div key={label} className="relative group overflow-hidden rounded-lg" style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}>
-                  <Image src={src} alt={label} width={500} height={500} className="w-full h-72 object-cover group-hover:scale-110 transition duration-500" />
-                  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center">
-                    <h3 className="text-lg font-semibold mb-3">{label}</h3>
-                    <button
-                      onClick={() => route && router.push(route)}
-                      className="bg-white text-black text-xs px-4 py-1 rounded hover:bg-gray-100 transition">
+                { src: '/grid01.png', label: 'Aquariums', route: '/fresh', description: 'Custom tanks & builds' },
+                { src: '/grid02.png', label: 'Fishes & Species', route: '/fish-species', description: 'Exotic & rare species' },
+                { src: '/grid03.png', label: 'Plants & Corals', route: '/plants', description: 'Live aquatic flora' },
+                { src: '/grid04.png', label: 'Services', route: '/services', description: 'Setup & maintenance' },
+              ].map(({ src, label, route, description }) => (
+                <div
+                  key={label}
+                  className="relative group overflow-hidden cursor-pointer"
+                  style={{
+                    borderRadius: '20px',
+                    boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+                    aspectRatio: '9/16',
+                  }}
+                  onClick={() => route && router.push(route)}
+                >
+                  {/* Image */}
+                  <Image
+                    src={src}
+                    alt={label}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+
+                  {/* Gradient overlay - always visible at bottom */}
+                  <div
+                    className="absolute inset-0 transition-opacity duration-500"
+                    style={{
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)',
+                    }}
+                  />
+
+
+
+                  {/* Text Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col items-start">
+                    <p className="text-blue-200 text-xs tracking-widest uppercase mb-1 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+                      {description}
+                    </p>
+                    <h3 className="text-white text-lg font-bold mb-3 leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+                      {label}
+                    </h3>
+                    <span
+                      className="inline-flex items-center gap-2 text-xs font-medium text-white border border-white/60 px-4 py-1.5 rounded-full
+                                 bg-white/10 backdrop-blur-sm
+                                 group-hover:bg-white group-hover:text-black transition-all duration-300"
+                    >
                       View More
-                    </button>
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               ))}
@@ -119,11 +168,11 @@ export default function Home() {
         </section>
 
         {/* Why Choose Section */}
-        <section className="py-20 bg-gradient-to-b from-blue-800 to-blue-900 text-white">
+        <section className="relative py-20 text-white" style={{ zIndex: 1 }}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold mb-4">Why Choose Ocean Crown ?</h2>
-              <p className="text-blue-200 max-w-2xl mx-auto text-lg">
+              <p className="text-blue-100 max-w-2xl mx-auto text-lg">
                 Your space deserves the elegance and tranquility of a perfectly crafted underwater world.
               </p>
             </div>
@@ -132,16 +181,16 @@ export default function Home() {
                 <div className="flex flex-col items-center lg:items-end">
                   <ShieldCheck className="w-10 h-10 mb-4 text-white" />
                   <h3 className="text-xl font-semibold mb-2">Expert Craftsmanship</h3>
-                  <p className="text-blue-200 text-sm max-w-xs">Every aquarium is thoughtfully designed for beauty and balance.</p>
+                  <p className="text-blue-100 text-sm max-w-xs">Every aquarium is thoughtfully designed for beauty and balance.</p>
                 </div>
                 <div className="flex flex-col items-center lg:items-end">
                   <Fish className="w-10 h-10 mb-4 text-white" />
                   <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>
-                  <p className="text-blue-200 text-sm max-w-xs">We use high-grade equipment and healthy aquatic species.</p>
+                  <p className="text-blue-100 text-sm max-w-xs">We use high-grade equipment and healthy aquatic species.</p>
                 </div>
               </div>
               <div className="flex flex-col items-center">
-                <div className="border-4 border-cyan-400 p-1 shadow-[0_0_30px_rgba(0,255,255,0.4)]">
+                <div className="p-1 shadow-[0_0_30px_rgba(0,255,255,0.4)]">
                   <Image src="/grid05.png" alt="Fish" width={450} height={500} className="object-cover" />
                 </div>
                 <button
@@ -154,12 +203,12 @@ export default function Home() {
                 <div className="flex flex-col items-center lg:items-start">
                   <FileText className="w-10 h-10 mb-4 text-white" />
                   <h3 className="text-xl font-semibold mb-2">Customized Solutions</h3>
-                  <p className="text-blue-200 text-sm max-w-xs">Tailor-made designs that perfectly match your space and vision.</p>
+                  <p className="text-blue-100 text-sm max-w-xs">Tailor-made designs that perfectly match your space and vision.</p>
                 </div>
                 <div className="flex flex-col items-center lg:items-start">
                   <Wrench className="w-10 h-10 mb-4 text-white" />
                   <h3 className="text-xl font-semibold mb-2">Ongoing Support</h3>
-                  <p className="text-blue-200 text-sm max-w-xs">Professional maintenance to keep your underwater world thriving.</p>
+                  <p className="text-blue-100 text-sm max-w-xs">Professional maintenance to keep your underwater world thriving.</p>
                 </div>
               </div>
             </div>
@@ -167,7 +216,7 @@ export default function Home() {
         </section>
 
         {/* Gallery Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-900 to-blue-950 text-white" id="plants">
+        <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }} id="plants">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">Our Aquatic Creations</h2>
@@ -187,7 +236,7 @@ export default function Home() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-950 to-blue-900 text-white">
+        <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }}>
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">What Our Clients Say?</h2>
@@ -208,7 +257,7 @@ export default function Home() {
                   </div>
                   <p className="text-blue-100 text-sm sm:text-base mb-4 italic">"{t.text}"</p>
                   <p className="font-bold text-white">{t.name}</p>
-                  <p className="text-blue-300 text-xs sm:text-sm">Client</p>
+                  <p className="text-blue-200 text-xs sm:text-sm">Client</p>
                 </div>
               ))}
             </div>
@@ -216,7 +265,7 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-900 to-blue-950 text-white" id="contact">
+        <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }} id="contact">
           <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Get In Touch</h2>
