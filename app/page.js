@@ -57,24 +57,24 @@ export default function Home() {
 
       {/* ── ALL SCROLLABLE SECTIONS — single wrapper with ocean bg image ── */}
       <div
-  className="relative z-10"
-  style={{
-    backgroundImage: "url('/home-back1.jpg')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundAttachment: 'scroll',   // ← was 'local'
-  }}
->
-  <div
-    style={{
-      position: 'absolute',
-      top: 0, left: 0, right: 0, bottom: 0,
-      background: 'rgba(0, 8, 24, 0.30)',  // ← was 0.52
-      pointerEvents: 'none',
-      zIndex: 0,
-    }}
-  />
+        className="relative z-10"
+        style={{
+          backgroundImage: "url('/home-back1.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'scroll',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0, 8, 24, 0.30)',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
 
         {/* Crafting Section */}
         <section className="relative py-16 sm:py-20 lg:py-24 text-white" style={{ zIndex: 1 }} id="about">
@@ -118,8 +118,8 @@ export default function Home() {
                   key={label}
                   className="relative group overflow-hidden cursor-pointer"
                   style={{
-                    borderRadius: '20px',
-                    boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+                    borderRadius: '0px',
+                    boxShadow: '4px 6px 18px rgba(0,0,0,0.45)',
                     aspectRatio: '9/16',
                   }}
                   onClick={() => route && router.push(route)}
@@ -139,8 +139,6 @@ export default function Home() {
                       background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)',
                     }}
                   />
-
-
 
                   {/* Text Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col items-start">
