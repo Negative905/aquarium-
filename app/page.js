@@ -107,7 +107,7 @@ export default function Home() {
                 <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
               {[
                 { src: '/grid01.png', label: 'Aquariums', route: '/fresh', description: 'Custom tanks & builds' },
                 { src: '/grid02.png', label: 'Fishes & Species', route: '/fish-species', description: 'Exotic & rare species' },
