@@ -132,7 +132,7 @@ export default function ContactPage() {
 
       {/* ── Hero / Contact Section ── */}
       <section
-        className="flex-1 relative flex items-center justify-center px-6 py-16 overflow-hidden"
+        className="flex-1 relative pt-16 pb-0 px-6 overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #1a4fa0 0%, #1a3a7a 40%, #0f2550 100%)' }}
       >
         <motion.div
@@ -156,11 +156,11 @@ export default function ContactPage() {
           />
         </motion.div>
 
-        <div className="max-w-5xl w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center relative z-10">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start relative z-10">
 
           {/* ── Left – Contact Info ── */}
           <motion.div
-            className="text-white md:col-span-1"
+            className="text-white md:col-span-1 md:pt-40"
             variants={slideRight}
             initial="hidden"
             animate="visible"
@@ -208,7 +208,7 @@ export default function ContactPage() {
 
           {/* ── Right – Contact Form Card ── */}
           <motion.div
-            className="md:col-span-2 rounded-lg p-8"
+            className="md:col-span-2 rounded-lg mt-24 p-8"
             style={{
               background: 'rgba(255,255,255,0.08)',
               backdropFilter: 'blur(4px)',

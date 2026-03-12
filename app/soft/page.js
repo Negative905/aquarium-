@@ -1,70 +1,115 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { addToCart } from '../../components/Cart'
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { addToCart } from "../../components/Cart";
 
-const products = [
-  { id: 501, name: 'Zoanthids', description: 'Bright and colorful coral with easy care.', price: '₹1,500 – ₹4,000', numericPrice: 2750, image: '/coral1.png', alt: 'Zoanthids', size: 'Standard', color: 'Varies' },
-  { id: 502, name: 'Mushroom Coral', description: 'Soft, textured coral with unique shapes.', price: '₹1,200 – ₹3,500', numericPrice: 2350, image: '/coral2.png', alt: 'Mushroom Coral', size: 'Standard', color: 'Varies' },
-  { id: 503, name: 'Leather Coral', description: 'Flowing coral that adds natural motion', price: '₹2,000 – ₹5,000', numericPrice: 3500, image: '/coral3.png', alt: 'Leather Coral', size: 'Standard', color: 'Varies' },
-  { id: 504, name: 'Pulsing Xenia', description: 'Fascinating coral known for its rhythmic movement.', price: '₹1,800 – ₹4,500', numericPrice: 3150, image: '/plant4.png', alt: 'Pulsing Xenia', size: 'Standard', color: 'Varies' },
-]
+const API = process.env.NEXT_PUBLIC_API_URL;
+
+// ✅ Hardcoded images in order
+const SOFT_CORAL_IMAGES = [
+  { src: "/coral1.png", alt: "Zoanthids" },
+  { src: "/coral2.png", alt: "Mushroom Coral" },
+  { src: "/coral3.png", alt: "Leather Coral" },
+  { src: "/plant4.png", alt: "Pulsing Xenia" },
+];
 
 const qtyVariant = {
   hidden: { opacity: 0, scale: 0.85 },
-  visible: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 350, damping: 22 } },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring", stiffness: 350, damping: 22 },
+  },
   exit: { opacity: 0, scale: 0.85, transition: { duration: 0.15 } },
-}
+};
 
 export default function SoftCoralsPage() {
-  const [quantities, setQuantities] = useState({})
-  const [sortBy, setSortBy] = useState('')
-  const [isSortOpen, setIsSortOpen] = useState(false)
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
+  const [sortBy, setSortBy] = useState("");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          `${API}/products?categories=69b236a6da5543e64646dcba`,
+        );
+        const data = await res.json();
+        const mapped = data.map((item, index) => ({
+          ...item,
+          id: item._id,
+          numericPrice: item.price,
+          price: `₹${item.price.toLocaleString("en-IN")}`,
+          image: SOFT_CORAL_IMAGES[index]?.src || "/coral1.png",
+          alt: SOFT_CORAL_IMAGES[index]?.alt || item.name,
+        }));
+        setProducts(mapped);
+      } catch (err) {
+        console.error("Failed to fetch soft corals:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product) => {
-    addToCart({ ...product, source: 'soft-corals', quantity: 1 })
-    setQuantities(prev => ({ ...prev, [product.id]: 1 }))
-  }
+    addToCart({ ...product, source: "soft-corals", quantity: 1 });
+    setQuantities((prev) => ({ ...prev, [product.id]: 1 }));
+  };
 
   const handleIncrease = (product) => {
-    const newQty = (quantities[product.id] || 0) + 1
-    setQuantities(prev => ({ ...prev, [product.id]: newQty }))
-    addToCart({ ...product, source: 'soft-corals', quantity: newQty })
-  }
+    const newQty = (quantities[product.id] || 0) + 1;
+    setQuantities((prev) => ({ ...prev, [product.id]: newQty }));
+    addToCart({ ...product, source: "soft-corals", quantity: newQty });
+  };
 
   const handleDecrease = (product) => {
-    const current = quantities[product.id] || 0
+    const current = quantities[product.id] || 0;
     if (current <= 1) {
-      setQuantities(prev => { const updated = { ...prev }; delete updated[product.id]; return updated })
+      setQuantities((prev) => {
+        const updated = { ...prev };
+        delete updated[product.id];
+        return updated;
+      });
     } else {
-      const newQty = current - 1
-      setQuantities(prev => ({ ...prev, [product.id]: newQty }))
-      addToCart({ ...product, source: 'soft-corals', quantity: newQty })
+      const newQty = current - 1;
+      setQuantities((prev) => ({ ...prev, [product.id]: newQty }));
+      addToCart({ ...product, source: "soft-corals", quantity: newQty });
     }
-  }
+  };
 
   const getSortedProducts = () => {
-    const sorted = [...products]
-    if (sortBy === 'Price: Low to High') return sorted.sort((a, b) => a.numericPrice - b.numericPrice)
-    if (sortBy === 'Price: High to Low') return sorted.sort((a, b) => b.numericPrice - a.numericPrice)
-    return sorted
-  }
+    const sorted = [...products];
+    if (sortBy === "Price: Low to High")
+      return sorted.sort((a, b) => a.numericPrice - b.numericPrice);
+    if (sortBy === "Price: High to Low")
+      return sorted.sort((a, b) => b.numericPrice - a.numericPrice);
+    return sorted;
+  };
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)]">
       <div className="pt-16">
-
         {/* ── Hero ── */}
         <section className="py-10 text-center px-4">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2" style={{ fontFamily: 'Georgia, serif' }}>Plants & Corals</h1>
-          <p className="text-[#8fa8c0] text-sm sm:text-base tracking-wide">Soft Corals</p>
+          <h1
+            className="text-4xl sm:text-5xl font-bold text-white mb-2"
+            style={{ fontFamily: "Georgia, serif" }}
+          >
+            Plants & Corals
+          </h1>
+          <p className="text-[#8fa8c0] text-sm sm:text-base tracking-wide">
+            Soft Corals
+          </p>
         </section>
 
         {/* ── Products ── */}
         <section className="px-4 sm:px-8 lg:px-16 pb-20">
           <div className="max-w-6xl mx-auto">
-
             {/* Sort */}
             <div className="flex justify-end mb-6">
               <div className="relative">
@@ -73,8 +118,18 @@ export default function SoftCoralsPage() {
                   className="flex items-center gap-2 bg-white text-black text-xs px-3 py-2 rounded-sm shadow-sm hover:bg-gray-50 transition-colors"
                 >
                   Sort by
-                  <svg className={`w-3 h-3 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  <svg
+                    className={`w-3 h-3 transition-transform ${isSortOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 <AnimatePresence>
@@ -86,97 +141,129 @@ export default function SoftCoralsPage() {
                       exit={{ opacity: 0, y: -4, scale: 0.96 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {['Price: Low to High', 'Price: High to Low'].map((option) => (
-                        <button key={option} onClick={() => { setSortBy(option); setIsSortOpen(false) }}
-                          className="block w-full text-left px-4 py-2.5 text-black text-xs hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
-                          {option}
-                        </button>
-                      ))}
+                      {["Price: Low to High", "Price: High to Low"].map(
+                        (option) => (
+                          <button
+                            key={option}
+                            onClick={() => {
+                              setSortBy(option);
+                              setIsSortOpen(false);
+                            }}
+                            className="block w-full text-left px-4 py-2.5 text-black text-xs hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
+                          >
+                            {option}
+                          </button>
+                        ),
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             </div>
 
-            {/* Grid:
-                mobile: 1 column, fixed-height image
-                sm+:    original 2-column layout, unchanged
-            */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 sm:gap-x-14 sm:gap-y-28">
-              {getSortedProducts().map((product) => (
-                <div key={product.id} className="bg-[#0a1e38] rounded-sm overflow-hidden shadow-md group">
+            {/* Loading */}
+            {loading && (
+              <div className="text-center text-white/60 py-20">
+                Loading products...
+              </div>
+            )}
 
-                  {/* Image:
-                      mobile → fixed h-56
-                      sm+    → original pb-[105%] portrait ratio
-                  */}
-                  <div className="relative w-full h-56 sm:h-0 sm:pb-[105%] overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.alt}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.style.background = '#0a2a4a' }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-teal-900 flex items-center justify-center -z-10" />
-                  </div>
+            {/* Grid */}
+            {!loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 sm:gap-x-14 sm:gap-y-28">
+                {getSortedProducts().map((product) => (
+                  <div
+                    key={product.id}
+                    className="bg-[#0a1e38] rounded-sm overflow-hidden shadow-md group"
+                  >
+                    <div className="relative w-full h-56 sm:h-0 sm:pb-[105%] overflow-hidden">
+                      <img
+                        src={product.image}
+                        alt={product.alt}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.parentElement.style.background = "#0a2a4a";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-teal-900 flex items-center justify-center -z-10" />
+                    </div>
 
-                  {/* Info */}
-                  <div className="p-4 text-center">
-                    <h3 className="text-sm sm:text-base font-bold text-white mb-1" style={{ fontFamily: 'Georgia, serif' }}>{product.name}</h3>
-                    <p className="text-[#8fa8c0] text-xs sm:text-sm mb-2 leading-relaxed">{product.description}</p>
-                    <p className="text-white font-bold text-sm sm:text-base mb-3">{product.price}</p>
+                    <div className="p-4 text-center">
+                      <h3
+                        className="text-sm sm:text-base font-bold text-white mb-1"
+                        style={{ fontFamily: "Georgia, serif" }}
+                      >
+                        {product.name}
+                      </h3>
+                      <p className="text-[#8fa8c0] text-xs sm:text-sm mb-2 leading-relaxed">
+                        {product.description}
+                      </p>
+                      <p className="text-white font-bold text-sm sm:text-base mb-3">
+                        {product.price}
+                      </p>
 
-                    <div className="flex justify-center">
-                      <AnimatePresence mode="wait">
-                        {quantities[product.id] ? (
-                          <motion.div
-                            key="qty"
-                            variants={qtyVariant}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            className="flex items-center mx-auto w-fit backdrop-blur-md bg-white/20 border border-white/30 rounded-xl overflow-hidden mt-3 mb-10"
-                          >
-                            <button onClick={() => handleDecrease(product)} className="text-white text-lg font-bold px-4 py-2 hover:bg-white/20 transition-all duration-200 leading-none">−</button>
-                            <AnimatePresence mode="wait">
-                              <motion.span
-                                key={quantities[product.id]}
-                                className="text-white text-sm font-semibold px-3 py-2 border-x border-white/30 min-w-[36px] text-center"
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.15 }}
+                      <div className="flex justify-center">
+                        <AnimatePresence mode="wait">
+                          {quantities[product.id] ? (
+                            <motion.div
+                              key="qty"
+                              variants={qtyVariant}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              className="flex items-center mx-auto w-fit backdrop-blur-md bg-white/20 border border-white/30 rounded-xl overflow-hidden mt-3 mb-10"
+                            >
+                              <button
+                                onClick={() => handleDecrease(product)}
+                                className="text-white text-lg font-bold px-4 py-2 hover:bg-white/20 transition-all duration-200 leading-none"
                               >
-                                {quantities[product.id]}
-                              </motion.span>
-                            </AnimatePresence>
-                            <button onClick={() => handleIncrease(product)} className="text-white text-lg font-bold px-4 py-2 hover:bg-white/20 transition-all duration-200 leading-none">+</button>
-                          </motion.div>
-                        ) : (
-                          <motion.button
-                            key="add"
-                            variants={qtyVariant}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            onClick={() => handleAddToCart(product)}
-                            className="text-xs sm:text-sm mt-3 mb-10 py-2 px-8 sm:px-12 transition-all duration-300 font-medium tracking-wide rounded-xl backdrop-blur-md border bg-white/20 border-white/30 text-white hover:bg-white/30 w-full sm:w-auto"
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                          >
-                            🛒 Add to cart
-                          </motion.button>
-                        )}
-                      </AnimatePresence>
+                                −
+                              </button>
+                              <AnimatePresence mode="wait">
+                                <motion.span
+                                  key={quantities[product.id]}
+                                  className="text-white text-sm font-semibold px-3 py-2 border-x border-white/30 min-w-[36px] text-center"
+                                  initial={{ opacity: 0, y: -6 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: 6 }}
+                                  transition={{ duration: 0.15 }}
+                                >
+                                  {quantities[product.id]}
+                                </motion.span>
+                              </AnimatePresence>
+                              <button
+                                onClick={() => handleIncrease(product)}
+                                className="text-white text-lg font-bold px-4 py-2 hover:bg-white/20 transition-all duration-200 leading-none"
+                              >
+                                +
+                              </button>
+                            </motion.div>
+                          ) : (
+                            <motion.button
+                              key="add"
+                              variants={qtyVariant}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              onClick={() => handleAddToCart(product)}
+                              className="text-xs sm:text-sm mt-3 mb-10 py-2 px-8 sm:px-12 transition-all duration-300 font-medium tracking-wide rounded-xl backdrop-blur-md border bg-white/20 border-white/30 text-white hover:bg-white/30 w-full sm:w-auto"
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                            >
+                              🛒 Add to cart
+                            </motion.button>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </div>
     </div>
-  )
+  );
 }

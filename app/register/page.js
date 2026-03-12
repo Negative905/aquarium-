@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-// ... keep all your icon components exactly as they are ...
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 48 48">
     <path
@@ -81,49 +80,63 @@ const fieldVariant = {
   },
 };
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
-  const [error, setError] = useState(""); // ✅ new
-  const [loading, setLoading] = useState(false); // ✅ new
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setError("");
+
+    if (!name || !email || !phone || !password || !confirm) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    if (password !== confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await fetch(`${API}/users/login`, {
+      const res = await fetch(`${API}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          password,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Invalid email or password");
+        setError(data.message || "Registration failed. Please try again.");
         setLoading(false);
         return;
       }
 
-      // ✅ Save token AND userId inside the function where data exists
-      if (remember) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
-      } else {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("userId", data.userId);
-      }
-
-      // ✅ Redirect to homepage after login
-      router.push("/");
+      // ✅ Redirect to login after successful registration
+      router.push("/login");
     } catch (err) {
       setError("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center font-sans relative"
@@ -153,7 +166,7 @@ export default function LoginPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          Login
+          Register
         </motion.h1>
         <motion.p
           className="text-blue-100 text-sm text-center mb-6"
@@ -161,11 +174,11 @@ export default function LoginPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
-          Hi, Welcome back 👋
+          Create your Ocean Crown account 🌊
         </motion.p>
 
         <motion.div variants={formContainer} initial="hidden" animate="visible">
-          {/* Google Login - keep as is */}
+          {/* Google Register */}
           <motion.div variants={fieldVariant}>
             <motion.button
               className="w-full flex items-center justify-center gap-3 bg-white text-gray-700 font-medium text-sm py-3 rounded-lg hover:bg-gray-50 transition-colors mb-4 shadow-sm"
@@ -173,7 +186,7 @@ export default function LoginPage() {
               whileTap={{ scale: 0.98 }}
             >
               <GoogleIcon />
-              Login with Google
+              Register with Google
             </motion.button>
           </motion.div>
 
@@ -184,12 +197,12 @@ export default function LoginPage() {
           >
             <div className="flex-1 h-px bg-white/30" />
             <span className="text-white/70 text-xs whitespace-nowrap">
-              or Login with Email
+              or Register with Email
             </span>
             <div className="flex-1 h-px bg-white/30" />
           </motion.div>
 
-          {/* ✅ Error message */}
+          {/* Error message */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
@@ -199,6 +212,22 @@ export default function LoginPage() {
               {error}
             </motion.div>
           )}
+
+          {/* Name */}
+          <motion.div variants={fieldVariant} className="mb-3">
+            <label className="block text-white text-sm mb-1 font-medium">
+              Full Name
+            </label>
+            <motion.input
+              type="text"
+              placeholder="eg. John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-lg text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-300 bg-white/90 backdrop-blur-sm transition-shadow"
+              whileFocus={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            />
+          </motion.div>
 
           {/* Email */}
           <motion.div variants={fieldVariant} className="mb-3">
@@ -216,6 +245,22 @@ export default function LoginPage() {
             />
           </motion.div>
 
+          {/* Phone */}
+          <motion.div variants={fieldVariant} className="mb-3">
+            <label className="block text-white text-sm mb-1 font-medium">
+              Phone Number
+            </label>
+            <motion.input
+              type="tel"
+              placeholder="eg. 9876543210"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-lg text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-300 bg-white/90 backdrop-blur-sm transition-shadow"
+              whileFocus={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            />
+          </motion.div>
+
           {/* Password */}
           <motion.div variants={fieldVariant} className="mb-3">
             <label className="block text-white text-sm mb-1 font-medium">
@@ -224,7 +269,7 @@ export default function LoginPage() {
             <div className="relative">
               <motion.input
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your Password"
+                placeholder="Min. 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2.5 rounded-lg text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-300 bg-white/90 backdrop-blur-sm pr-10 transition-shadow"
@@ -252,54 +297,67 @@ export default function LoginPage() {
             </div>
           </motion.div>
 
-          {/* Remember / Forgot */}
-          <motion.div
-            variants={fieldVariant}
-            className="flex items-center justify-between mb-5"
-          >
-            <label className="flex items-center gap-2 text-white/80 text-xs cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                className="w-3.5 h-3.5 rounded accent-blue-400"
-              />
-              Remember me
+          {/* Confirm Password */}
+          <motion.div variants={fieldVariant} className="mb-5">
+            <label className="block text-white text-sm mb-1 font-medium">
+              Confirm Password
             </label>
-            <motion.a
-              href="#"
-              className="text-white/80 text-xs hover:text-white underline"
-              whileHover={{ x: 2 }}
-            >
-              Forgot Password?
-            </motion.a>
+            <div className="relative">
+              <motion.input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Re-enter your password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-lg text-sm text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-300 bg-white/90 backdrop-blur-sm pr-10 transition-shadow"
+                whileFocus={{ scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+              <motion.button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                whileTap={{ scale: 0.85, rotate: 15 }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={showConfirm ? "open" : "closed"}
+                    initial={{ opacity: 0, rotate: -20 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 20 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <EyeIcon open={showConfirm} />
+                  </motion.span>
+                </AnimatePresence>
+              </motion.button>
+            </div>
           </motion.div>
 
-          {/* Login Button with loading state */}
+          {/* Register Button */}
           <motion.div variants={fieldVariant}>
             <motion.button
-              onClick={handleLogin}
+              onClick={handleRegister}
               disabled={loading}
               className="w-full bg-white text-[#1a5eab] font-semibold text-sm py-3 rounded-lg hover:bg-blue-50 transition-colors mb-4 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
               whileHover={{ scale: loading ? 1 : 1.02 }}
               whileTap={{ scale: loading ? 1 : 0.97 }}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Creating account..." : "Create Account"}
             </motion.button>
           </motion.div>
 
-          {/* Sign Up */}
+          {/* Login link */}
           <motion.p
             variants={fieldVariant}
             className="text-center text-white/70 text-xs"
           >
-            Not registered yet?{" "}
+            Already have an account?{" "}
             <motion.a
-              href="/register"
+              href="/login"
               className="text-white font-medium underline"
               whileHover={{ x: 2 }}
             >
-              Sign up ↗
+              Login ↗
             </motion.a>
           </motion.p>
         </motion.div>
