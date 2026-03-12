@@ -156,11 +156,11 @@ export default function ContactPage() {
           />
         </motion.div>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start relative z-10">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center relative z-10 min-h-[calc(100vh-4rem)]">
 
           {/* ── Left – Contact Info ── */}
           <motion.div
-            className="text-white md:col-span-1 md:pt-40"
+            className="text-white md:col-span-1"
             variants={slideRight}
             initial="hidden"
             animate="visible"
@@ -208,7 +208,7 @@ export default function ContactPage() {
 
           {/* ── Right – Contact Form Card ── */}
           <motion.div
-            className="md:col-span-2 rounded-lg mt-24 p-8"
+            className="md:col-span-2 rounded-lg mb-5 p-8"
             style={{
               background: 'rgba(255,255,255,0.08)',
               backdropFilter: 'blur(4px)',

@@ -136,7 +136,7 @@ export default function Home() {
                 <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
               {[
                 {
                   src: "/grid01.png",
@@ -167,7 +167,7 @@ export default function Home() {
                   key={label}
                   className="relative group overflow-hidden cursor-pointer"
                   style={{
-                    borderRadius: "20px",
+                    
                     boxShadow: "0 25px 50px rgba(0,0,0,0.5)",
                     aspectRatio: "9/16",
                   }}
