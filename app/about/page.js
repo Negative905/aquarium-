@@ -1,23 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 
 export default function AboutPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAquariumsOpen, setIsAquariumsOpen] = useState(false)
-
   return (
-  <div className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)]">
+    <div className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)] overflow-x-hidden">
 
-
-  
-
-      {/* ─── PAGE CONTENT ─── */}
       <div className="pt-16">
 
         {/* ── HERO ── */}
-        <section className=" py-16 text-center px-4">
+        <section className="py-16 text-center px-4">
           <h1
             className="text-4xl sm:text-5xl font-bold text-white mb-3"
             style={{ fontFamily: 'Georgia, serif' }}
@@ -30,7 +22,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── INTRO ── */}
-        <section className=" py-16 px-4 sm:px-6 lg:px-8">
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div className="space-y-5">
               <p className="text-[#b0c4d8] text-sm sm:text-base leading-relaxed">
@@ -55,11 +47,11 @@ export default function AboutPage() {
         </section>
 
         {/* ── VISION & MISSION ── */}
-        <section className="py-16 px-0">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-stretch">
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-stretch gap-0">
 
             {/* Coral Image */}
-            <div className="relative h-72 md:h-auto min-h-[500px] overflow-hidden ml-5">
+            <div className="relative h-72 md:h-auto min-h-[500px] overflow-hidden rounded-2xl">
               <Image
                 src="/about-us2.png"
                 alt="Coral reef"
@@ -69,7 +61,7 @@ export default function AboutPage() {
             </div>
 
             {/* Vision + Mission Text */}
-            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8 px-8 sm:px-12 py-12 items-center">
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8 px-4 sm:px-8 lg:px-12 py-12 items-center">
               <div>
                 <h3
                   className="text-xl font-semibold text-white mb-4"
@@ -139,7 +131,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── OUR COMMITMENT ── */}
-        <section className=" py-20 px-4 text-center">
+        <section className="py-20 px-4 text-center">
           <h2
             className="text-3xl sm:text-4xl font-bold text-white mb-6"
             style={{ fontFamily: 'Georgia, serif' }}

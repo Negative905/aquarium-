@@ -6,7 +6,7 @@ import { addToCart } from "../../components/Cart";
 const API = process.env.NEXT_PUBLIC_API_URL;
 
 const LOCAL_IMAGES = {
-  Goldfish: "/fish1.png",
+  Goldfish: "/fish4.png",
   Guppy: "/fish2.png",
   "Betta Fish": "/fish3.png",
   "Angel Fish": "/fish4.png",
@@ -21,7 +21,7 @@ const LOCAL_IMAGES = {
   Seahorse: "/fish9.png",
   Starfish: "/fish10.png",
   "Cleaner Shrimp": "/fish11.png",
-  "Freshwater Stingray": "/fish12.png",
+  "Freshwater Stingray": "/fish12.png", 
 };
 
 const qtyVariant = {

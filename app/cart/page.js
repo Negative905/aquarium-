@@ -26,16 +26,15 @@ const pageVariant = {
 };
 
 const headingVariant = {
-  hidden: { opacity: 0, y: -24 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 const columnVariant = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: -32 },
   visible: {
     opacity: 1,
     y: 0,
@@ -151,7 +150,6 @@ export default function CartPage() {
     setPromoSuccess("");
   };
 
-  //const subtotal      = items.reduce((sum, i) => sum + i.numericPrice * i.qty, 0);
   const subtotal = items.reduce(
     (sum, i) => sum + (i.numericPrice ?? i.price ?? 0) * (i.qty ?? 1),
     0,
@@ -187,12 +185,12 @@ export default function CartPage() {
 
   return (
     <motion.div
-      className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)] flex items-center justify-center p-6 font-sans"
+      className="min-h-screen bg-[linear-gradient(180.8deg,#065EB6_0.68%,#000C18_99.32%)] flex items-start justify-center pt-28 pb-14 px-6 pb-6 font-sans"
       variants={pageVariant}
       initial="hidden"
       animate="visible"
     >
-      <div className="w-full max-w-4xl mt-24">
+      <div className="w-full max-w-4xl">
         <AnimatePresence mode="wait">
           {items.length === 0 ? (
             <motion.div
@@ -248,7 +246,7 @@ export default function CartPage() {
               animate="visible"
               variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
             >
-              {/* Heading — only visible when cart has items */}
+              {/* Heading — fades in only, no movement */}
               <motion.h1
                 className="text-4xl font-bold text-white mb-6"
                 variants={headingVariant}
