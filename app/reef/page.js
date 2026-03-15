@@ -6,7 +6,6 @@ import { addToCart, removeFromCart, updateQty } from "../../components/Cart";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-// ✅ Hardcoded images in order
 const REEF_IMAGES = [
   { src: "/reef1.png", alt: "Coral Reef Nano Tank" },
   { src: "/reef2.png", alt: "Advanced Reef System" },
@@ -175,9 +174,10 @@ export default function ReefAquariumsPage() {
                 {sortedProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="rounded-sm bg-[#0a1e38] overflow-hidden shadow-md group"
+                    className="rounded-sm bg-[#0a1e38] shadow-md group"
                   >
-                    <div className="relative w-full h-56 sm:h-0 sm:pb-[105%]">
+                    {/* ✅ overflow-hidden on image container only — zoom stays inside image box */}
+                    <div className="relative w-full h-56 sm:h-0 sm:pb-[105%] overflow-hidden">
                       <img
                         src={product.image}
                         alt={product.alt}

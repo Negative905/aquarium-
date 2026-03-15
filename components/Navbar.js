@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CiLogout } from "react-icons/ci";
@@ -76,13 +76,22 @@ export default function Navbar() {
 
   useEffect(() => {
     const updateCount = () => {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (!token) {
+        setCartCount(0);
+        return;
+      }
       const cart = getCart();
       const total = cart.reduce((sum, item) => sum + item.qty, 0);
       setCartCount(total);
     };
     updateCount();
     window.addEventListener("cart-updated", updateCount);
-    return () => window.removeEventListener("cart-updated", updateCount);
+    window.addEventListener("auth-updated", updateCount);
+    return () => {
+      window.removeEventListener("cart-updated", updateCount);
+      window.removeEventListener("auth-updated", updateCount);
+    };
   }, []);
 
   const loadAuth = () => {
@@ -113,7 +122,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -125,21 +133,24 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
     localStorage.removeItem("userEmail");
+    localStorage.removeItem("ocean_crown_cart"); // ✅ clears actual cart data
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("userName");
     sessionStorage.removeItem("userEmail");
     setIsLoggedIn(false);
     setIsProfileOpen(false);
+    setIsMenuOpen(false);
+    setCartCount(0);
     setUser({ name: "", email: "" });
     window.dispatchEvent(new Event("auth-updated"));
     window.location.href = "/login";
-  };
+  }, []);
 
   const getInitials = (name) => {
     if (!name) return null;
@@ -184,7 +195,7 @@ export default function Navbar() {
           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg>
       <AnimatePresence>
-        {cartCount > 0 && (
+        {isLoggedIn && cartCount > 0 && (
           <motion.span key={cartCount} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}
             className="absolute -top-2 -right-2 bg-red-400 text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-0.5 leading-none">
@@ -240,12 +251,11 @@ export default function Navbar() {
           {initials ?? <UserSilhouette className="w-4 h-4" />}
         </motion.button>
 
-        {/* ── Profile Dropdown ── */}
         <AnimatePresence>
           {isProfileOpen && (
             <motion.div
-              className="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[999]"
-              style={{ maxWidth: "calc(100vw - 2rem)" }} // ✅ never overflow viewport
+              className="absolute right-0 top-full mt-3 w-[calc(100vw-2rem)] sm:w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[999]"
+              style={{ maxWidth: "224px", minWidth: "180px" }}
               variants={profileDropdownVariant}
               initial="hidden"
               animate="visible"
@@ -259,9 +269,9 @@ export default function Navbar() {
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow">
                   {initials ?? <UserSilhouette className="w-5 h-5" />}
                 </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">{user.name || "User"}</p>
-                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-gray-800 truncate leading-tight">{user.name || "User"}</p>
+                  <p className="text-xs text-gray-500 truncate leading-tight">{user.email}</p>
                 </div>
               </motion.div>
 
@@ -276,8 +286,8 @@ export default function Navbar() {
                     variants={profileItemVariant} custom={i + 1} initial="hidden" animate="visible"
                     whileHover={{ x: 3 }} transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <span className="text-base w-5 text-center">{icon}</span>
-                    <span>{label}</span>
+                    <span className="text-base w-5 text-center flex-shrink-0">{icon}</span>
+                    <span className="truncate">{label}</span>
                   </motion.a>
                 ))}
               </div>
@@ -291,7 +301,7 @@ export default function Navbar() {
                   initial="hidden" animate="visible"
                   whileHover={{ x: 3 }} transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <span className="text-base w-5 text-center"><CiLogout /></span>
+                  <span className="text-base w-5 text-center flex-shrink-0"><CiLogout /></span>
                   <span>Logout</span>
                 </motion.button>
               </div>
@@ -425,10 +435,8 @@ export default function Navbar() {
 
           {/* Right Icons */}
           <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-
-            {/* Desktop icons */}
             <div className="hidden lg:flex items-center gap-2">
-              <ProfileButton />
+              {ProfileButton({ isMobile: false })}
               <motion.button onClick={() => router.push("/cart")}
                 className="w-9 h-9 rounded-full bg-black hover:bg-gray-800 transition-colors flex items-center justify-center text-white relative flex-shrink-0"
                 variants={iconButtonVariant} initial="hidden" animate="visible" custom={1}
@@ -437,9 +445,8 @@ export default function Navbar() {
               </motion.button>
             </div>
 
-            {/* Mobile/tablet icons */}
             <div className="flex lg:hidden items-center gap-1.5">
-              <ProfileButton isMobile />
+              {ProfileButton({ isMobile: true })}
               <motion.button onClick={() => router.push("/cart")}
                 className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white relative flex-shrink-0"
                 whileTap={{ scale: 0.9 }}>
@@ -447,7 +454,6 @@ export default function Navbar() {
               </motion.button>
             </div>
 
-            {/* Hamburger — only on mobile/tablet */}
             <motion.button
               className="lg:hidden text-black p-1 ml-0.5 flex-shrink-0"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -571,9 +577,9 @@ export default function Navbar() {
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
                         {getInitials(user.name) ?? <UserSilhouette className="w-4 h-4" />}
                       </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-800 truncate">{user.name || "User"}</p>
-                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-gray-800 truncate leading-tight">{user.name || "User"}</p>
+                        <p className="text-xs text-gray-500 truncate leading-tight">{user.email}</p>
                       </div>
                     </div>
                     <div className="pt-2 space-y-0.5">
@@ -581,13 +587,15 @@ export default function Navbar() {
                         <a key={label} href={href}
                           className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:opacity-70 transition-opacity"
                           onClick={() => setIsMenuOpen(false)}>
-                          <span className="w-5 text-center">{icon}</span>
-                          <span>{label}</span>
+                          <span className="w-5 text-center flex-shrink-0">{icon}</span>
+                          <span className="truncate">{label}</span>
                         </a>
                       ))}
-                      <button onClick={handleLogout}
-                        className="flex items-center gap-3 py-2.5 text-sm text-red-500 hover:opacity-70 w-full transition-opacity">
-                        <CiLogout className="text-base w-5" />
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 py-2.5 text-sm text-red-500 hover:opacity-70 w-full transition-opacity"
+                      >
+                        <CiLogout className="text-base w-5 flex-shrink-0" />
                         <span>Logout</span>
                       </button>
                     </div>

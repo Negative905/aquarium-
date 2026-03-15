@@ -6,7 +6,6 @@ import { addToCart, removeFromCart, updateQty } from "../../components/Cart";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-// ✅ Hardcoded images in order
 const SALTWATER_IMAGES = [
   { src: "/saltwater1.png", alt: "Premium Marine Glass Tank" },
   { src: "/saltwater2.png", alt: "Rimless Marine Display" },
@@ -188,9 +187,10 @@ export default function SaltwaterAquariumsPage() {
                 {sortedProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="rounded-sm bg-[#0a1e38] overflow-hidden shadow-md group"
+                    className="rounded-sm bg-[#0a1e38] shadow-md group"
                   >
-                    <div className="relative w-full h-56 sm:h-0 sm:pb-[105%]">
+                    {/* ✅ overflow-hidden on image container only */}
+                    <div className="relative w-full h-56 sm:h-0 sm:pb-[105%] overflow-hidden">
                       <img
                         src={product.image}
                         alt={product.alt}

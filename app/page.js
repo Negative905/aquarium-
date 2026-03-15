@@ -122,102 +122,103 @@ export default function Home() {
 
         {/* Featured Categories */}
         <section
-          className="relative py-16 sm:py-20 lg:py-24 text-white"
-          style={{ zIndex: 1 }}
-          id="aquariums"
+  className="relative py-16 sm:py-20 lg:py-24 text-white"
+  style={{ zIndex: 1 }}
+  id="aquariums"
+>
+  <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="text-center mb-12">
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold whitespace-nowrap">
+          Featured Categories
+        </h2>
+        <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
+      </div>
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      {[
+        {
+          src: "/grid01.png",
+          label: "Aquariums",
+          route: "/fresh",
+          description: "Custom tanks & builds",
+        },
+        {
+          src: "/grid02.png",
+          label: "Fishes & Species",
+          route: "/fish-species",
+          description: "Exotic & rare species",
+        },
+        {
+          src: "/grid03.png",
+          label: "Plants & Corals",
+          route: "/plants",
+          description: "Live aquatic flora",
+        },
+        {
+          src: "/grid04.png",
+          label: "Services",
+          route: "/services",
+          description: "Setup & maintenance",
+        },
+      ].map(({ src, label, route, description }) => (
+        <div
+          key={label}
+          className="relative group overflow-hidden cursor-pointer w-full"
+          style={{
+            height: "520px",
+            boxShadow:
+              "0 20px 40px rgba(0,0,0,0.35), 0 8px 20px rgba(0,0,0,0.25)",
+            filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+          }}
+          onClick={() => route && router.push(route)}
         >
-          <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold whitespace-nowrap">
-                  Featured Categories
-                </h2>
-                <div className="h-px bg-white opacity-50 flex-1 max-w-xs"></div>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-              {[
-                {
-                  src: "/grid01.png",
-                  label: "Aquariums",
-                  route: "/fresh",
-                  description: "Custom tanks & builds",
-                },
-                {
-                  src: "/grid02.png",
-                  label: "Fishes & Species",
-                  route: "/fish-species",
-                  description: "Exotic & rare species",
-                },
-                {
-                  src: "/grid03.png",
-                  label: "Plants & Corals",
-                  route: "/plants",
-                  description: "Live aquatic flora",
-                },
-                {
-                  src: "/grid04.png",
-                  label: "Services",
-                  route: "/services",
-                  description: "Setup & maintenance",
-                },
-              ].map(({ src, label, route, description }) => (
-                <div
-                  key={label}
-                  className="relative group overflow-hidden cursor-pointer"
-                  style={{
-                    
-                    boxShadow: "0 25px 50px rgba(0,0,0,0.5)",
-                    aspectRatio: "9/16",
-                  }}
-                  onClick={() => route && router.push(route)}
-                >
-                  <Image
-                    src={src}
-                    alt={label}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  />
-                  <div
-                    className="absolute inset-0 transition-opacity duration-500"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)",
-                    }}
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col items-start">
-                    <p className="text-blue-200 text-xs tracking-widest uppercase mb-1 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                      {description}
-                    </p>
-                    <h3
-                      className="text-white text-lg font-bold mb-3 leading-tight"
-                      style={{ fontFamily: "Georgia, serif" }}
-                    >
-                      {label}
-                    </h3>
-                    <span className="inline-flex items-center gap-2 text-xs font-medium text-white border border-white/60 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-all duration-300">
-                      View More
-                      <svg
-                        className="w-3 h-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <Image
+            src={src}
+            alt={label}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          />
+          <div
+            className="absolute inset-0 transition-opacity duration-500"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)",
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col items-start">
+            <p className="text-blue-200 text-xs tracking-widest uppercase mb-1 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+              {description}
+            </p>
+            <h3
+              className="text-white text-lg font-bold mb-3 leading-tight"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              {label}
+            </h3>
+            <span className="inline-flex items-center gap-2 text-xs font-medium text-white border border-white/60 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-all duration-300">
+              View More
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </span>
           </div>
-        </section>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
         {/* Why Choose Section */}
         <section className="relative py-20 text-white" style={{ zIndex: 1 }}>
